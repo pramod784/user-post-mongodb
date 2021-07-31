@@ -72,7 +72,6 @@ module.exports = {
         var page = Math.max(0, req.params.page)
         console.log("-------------",page); */
         let post_data = await Posts.find().select(['_id','title','body','created_by','created_at']);
-
         if(post_data && post_data.length > 0)
         {
             return res.status(200).send({

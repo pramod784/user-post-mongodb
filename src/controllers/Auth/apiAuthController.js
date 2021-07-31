@@ -34,11 +34,19 @@ module.exports = {
                 message: "Role id mandatory!"
             });
         }
+        
         let name = req.body.name.trim();
         let email = req.body.email.trim();
         let password = req.body.password.trim();
         let role = req.body.role.trim();
-        
+        if(role != "admin" && role != "student")
+        {
+            return res.status(403).send({
+                status: false,
+                message: "Role must be admin or student only!"
+            });
+        }
+
         let insert_obj = { name:name,email:email,password:md5(password),role:role }
         let result = new Users(insert_obj);
         result.save().then((data) =>{
