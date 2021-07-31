@@ -1,8 +1,30 @@
 const {Posts } = require("../models/mongomodels")
+var validator = require('validator');
 module.exports = {
     createPost: async (req, res) => {    
-        let title = req.body.title;
-        let body = req.body.body;
+        if(!req.body.hasOwnProperty('title') || validator.isEmpty(req.body.title) || req.body.title === undefined || req.body.title.trim()=="")
+        {
+            return res.status(403).send({
+                status: false,
+                message: "Title is mandatory!"
+            });
+        }
+        if(!req.body.hasOwnProperty('body') || validator.isEmpty(req.body.body) || req.body.body === undefined || req.body.body.trim()=="")
+        {
+            return res.status(403).send({
+                status: false,
+                message: "Body is mandatory!"
+            });
+        }
+        if(!validator.isLength(req.body.body,1, 255))
+        {
+            return res.status(403).send({
+                status: false,
+                message: "Body length should be less than 255!"
+            });
+        }
+        let title = req.body.title.trim();
+        let body = req.body.body.trim();
         let userId = req.headers.userId;
         const result = new Posts({ title: title,body:body,created_by:userId });
         result.save().then((data) =>{
@@ -20,7 +42,15 @@ module.exports = {
         });
     },
     readPost:async(req,res)=>{
-        let post_id = req.params.postid;
+        if(!req.params.hasOwnProperty('postid') || validator.isEmpty(req.params.postid) || req.params.postid === undefined || req.params.postid.trim()=="")
+        {
+            return res.status(403).send({
+                status: false,
+                message: "Post id mandatory!"
+            });
+        }
+        let post_id = req.params.postid.trim();
+        
         let post_data = await Posts.findById(post_id).select(['_id','title','body','created_by','created_at']);
         if(post_data)
         {
@@ -43,7 +73,7 @@ module.exports = {
         console.log("-------------",page); */
         let post_data = await Posts.find().select(['_id','title','body','created_by','created_at']);
 
-        if(post_data)
+        if(post_data && post_data.length > 0)
         {
             return res.status(200).send({
                 message : "Post list retrieved successfully!",
@@ -53,15 +83,44 @@ module.exports = {
         }else
         {
             return res.status(400).send({
-                message : "No post available!",
+                message : "No posts available!",
                 status:true
             })
         }
     },
     updatePost:async(req,res)=>{
-        let title = req.body.title;
-        let body = req.body.body;
-        let post_id = req.params.postid;
+        if(!req.params.hasOwnProperty('postid') || validator.isEmpty(req.params.postid) || req.params.postid === undefined || req.params.postid.trim()=="")
+        {
+            return res.status(403).send({
+                status: false,
+                message: "Post id mandatory!"
+            });
+        }
+        if(!req.body.hasOwnProperty('title') || validator.isEmpty(req.body.title) || req.body.title === undefined || req.body.title.trim()=="")
+        {
+            return res.status(403).send({
+                status: false,
+                message: "Title is mandatory!"
+            });
+        }
+        if(!req.body.hasOwnProperty('body') || validator.isEmpty(req.body.body) || req.body.body === undefined || req.body.body.trim()=="")
+        {
+            return res.status(403).send({
+                status: false,
+                message: "Body is mandatory!"
+            });
+        }
+        if(!validator.isLength(req.body.body,1, 255))
+        {
+            return res.status(403).send({
+                status: false,
+                message: "Body length should be less than 255!"
+            });
+        }
+        let post_id = req.params.postid.trim();
+        let title = req.body.title.trim();
+        let body = req.body.body.trim();
+
         let update_obj = {
             title:title,
             body:body
@@ -82,7 +141,14 @@ module.exports = {
         }
     },
     deletePost:async(req,res)=>{
-        let post_id = req.params.postid;
+        if(!req.params.hasOwnProperty('postid') || validator.isEmpty(req.params.postid) || req.params.postid === undefined || req.params.postid.trim()=="")
+        {
+            return res.status(403).send({
+                status: false,
+                message: "Post id mandatory!"
+            });
+        }
+        let post_id = req.params.postid.trim();
         let deleted = await Posts.findByIdAndDelete(post_id);
         if(deleted)
         {

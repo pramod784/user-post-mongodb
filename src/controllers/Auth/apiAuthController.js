@@ -2,14 +2,42 @@ const { Users } = require("../../models/mongomodels")
 require("dotenv/config");
 const md5 = require("md5")
 const jwt = require("jsonwebtoken")
+var validator = require('validator');
 
 module.exports = {
     registerUser: async (req, res) => {
-        let name = req.body.name;
-        let email = req.body.email;
-        let password = req.body.password;
-        let role = req.body.role;
-        console.log(req.body)
+        if(!req.body.hasOwnProperty('name') || validator.isEmpty(req.body.name) || req.body.name === undefined || req.body.name.trim()=="")
+        {
+            return res.status(403).send({
+                status: false,
+                message: "Post id mandatory!"
+            });
+        }
+        if(!req.body.hasOwnProperty('email') || !validator.isEmail(req.body.email) || validator.isEmpty(req.body.email) || req.body.email === undefined || req.body.email.trim()=="")
+        {
+            return res.status(403).send({
+                status: false,
+                message: "Email id mandatory!"
+            });
+        }
+        if(!req.body.hasOwnProperty('password') || validator.isEmpty(req.body.password) || req.body.password === undefined || req.body.password.trim()=="")
+        {
+            return res.status(403).send({
+                status: false,
+                message: "Password id mandatory!"
+            });
+        }
+        if(!req.body.hasOwnProperty('role') || validator.isEmpty(req.body.role) || req.body.role === undefined || req.body.role.trim()=="")
+        {
+            return res.status(403).send({
+                status: false,
+                message: "Role id mandatory!"
+            });
+        }
+        let name = req.body.name.trim();
+        let email = req.body.email.trim();
+        let password = req.body.password.trim();
+        let role = req.body.role.trim();
         
         let insert_obj = { name:name,email:email,password:md5(password),role:role }
         let result = new Users(insert_obj);
@@ -28,8 +56,22 @@ module.exports = {
         });
     },
     loginUser:async(req,res)=>{
-        let email = req.body.email;
-        let password = req.body.password;
+        if(!req.body.hasOwnProperty('email') || !validator.isEmail(req.body.email) || validator.isEmpty(req.body.email) || req.body.email === undefined || req.body.email.trim()=="")
+        {
+            return res.status(403).send({
+                status: false,
+                message: "Email id mandatory!"
+            });
+        }
+        if(!req.body.hasOwnProperty('password') || validator.isEmpty(req.body.password) || req.body.password === undefined || req.body.password.trim()=="")
+        {
+            return res.status(403).send({
+                status: false,
+                message: "Password id mandatory!"
+            });
+        }
+        let email = req.body.email.trim();
+        let password = req.body.password.trim();
         Users.findOne({ email : email }, function(err, user) {
             if (user === null) {
                 return res.status(400).send({
