@@ -20,7 +20,7 @@ module.exports = {
     },
     readPost:async(req,res)=>{
         let post_id = req.params.postid;
-        let post_data = await Posts.findById(post_id).select(['_id','title','body','created_by',,'created_at']);
+        let post_data = await Posts.findById(post_id).select(['_id','title','body','created_by','created_at']);
         if(post_data)
         {
             return res.status(200).send({
@@ -37,7 +37,11 @@ module.exports = {
         }
     },
     getPostsList:async(req,res)=>{
-        let post_data = await Posts.find().select(['_id','title','body','created_by',,'created_at']);
+        /* var perPage = 10
+        var page = Math.max(0, req.params.page)
+        console.log("-------------",page); */
+        let post_data = await Posts.find().select(['_id','title','body','created_by','created_at']);
+
         if(post_data)
         {
             return res.status(200).send({
