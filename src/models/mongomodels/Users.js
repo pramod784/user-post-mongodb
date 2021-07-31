@@ -1,6 +1,4 @@
 const mongoconnect = require("../../config/mongoConnection")
-var uniqueValidator = require('mongoose-unique-validator');
-
 module.exports = mongoconnect.model('users', 
         {
             name: {
