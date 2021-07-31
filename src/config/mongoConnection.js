@@ -7,4 +7,5 @@ db.once('open', function() {
     console.log("Connected successfully!")    
 });
 mongoose.set('useCreateIndex', true)
+mongoose.set('useFindAndModify', false);
 module.exports = mongoose;

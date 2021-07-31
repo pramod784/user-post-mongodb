@@ -7,6 +7,10 @@ router.get("/",(req,res)=>{
 })
 router.post("/register",apiAuthController.registerUser)
 router.post("/login",apiAuthController.loginUser)
-router.post("/create/post",postsController.createPost)
+router.post("/post",postsController.createPost)
+router.get("/post/:postid",postsController.readPost)
+router.get("/post",postsController.getPostsList)
+router.patch("/post/:postid",postsController.updatePost)
+router.delete("/post/:postid",postsController.deletePost)
 
 module.exports = router
