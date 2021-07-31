@@ -10,7 +10,7 @@ router.post("/register",apiAuthController.registerUser)
 router.post("/login",apiAuthController.loginUser)
 router.post("/post",checkAdminAuth,postsController.createPost)
 router.get("/post/:postid",checkAuth,postsController.readPost)
-router.get("/post",checkAuth,postsController.getPostsList)
+router.post("/post/list",checkAuth,postsController.getPostsList)
 router.patch("/post/:postid",checkAdminAuth,postsController.updatePost)
 router.delete("/post/:postid",checkAdminAuth,postsController.deletePost)
 module.exports = router

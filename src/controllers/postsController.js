@@ -68,10 +68,10 @@ module.exports = {
         }
     },
     getPostsList:async(req,res)=>{
-        /* var perPage = 10
-        var page = Math.max(0, req.params.page)
-        console.log("-------------",page); */
-        let post_data = await Posts.find().select(['_id','title','body','created_by','created_at']);
+        let page_no = req.body.page_no == undefined || req.body.page_no < 1 ? 1 : req.body.page_no;
+        let limit = 10;
+        let offset = (page_no - 1) * limit;
+        let post_data = await Posts.find().select(['_id','title','body','created_by','created_at']).skip(offset).limit(limit);
         if(post_data && post_data.length > 0)
         {
             return res.status(200).send({
