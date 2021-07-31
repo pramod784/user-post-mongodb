@@ -3,7 +3,8 @@ module.exports = {
     createPost: async (req, res) => {    
         let title = req.body.title;
         let body = req.body.body;
-        const result = new Posts({ title: title,body:body,created_by:"pramod" });
+        let userId = req.headers.userId;
+        const result = new Posts({ title: title,body:body,created_by:userId });
         result.save().then((data) =>{
             return res.status(201).send({
                 message : "Post created successfully!",
