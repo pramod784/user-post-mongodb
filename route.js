@@ -13,4 +13,6 @@ router.get("/post/:postid",checkAuth,postsController.readPost)
 router.post("/post/list",checkAuth,postsController.getPostsList)
 router.patch("/post/:postid",checkAdminAuth,postsController.updatePost)
 router.delete("/post/:postid",checkAdminAuth,postsController.deletePost)
+
+router.get("/save/city",postsController.saveCities)
 module.exports = router
